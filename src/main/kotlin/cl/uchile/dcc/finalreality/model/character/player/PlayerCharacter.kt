@@ -7,7 +7,7 @@
  */
 package cl.uchile.dcc.finalreality.model.character.player
 
-import cl.uchile.dcc.finalreality.model.Weapon
+import cl.uchile.dcc.finalreality.model.weapons.WeaponInterface
 import cl.uchile.dcc.finalreality.model.character.AbstractCharacter
 import cl.uchile.dcc.finalreality.model.character.GameCharacter
 import java.util.concurrent.BlockingQueue
@@ -20,13 +20,13 @@ import java.util.concurrent.BlockingQueue
  * @author <a href="https://www.github.com/r8vnhill">R8V</a>
  * @author ~Your name~
  */
-interface PlayerCharacter {
-  val equippedWeapon: Weapon
+interface PlayerCharacter: GameCharacter {
+  val equippedWeapon: WeaponInterface
 
   /**
    * Equips a weapon to the character.
    */
-  fun equip(weapon: Weapon)
+  fun equip(weapon: WeaponInterface)
 }
 
 /**
@@ -42,17 +42,17 @@ interface PlayerCharacter {
  * @author ~Your name~
  */
 abstract class AbstractPlayerCharacter(
-  name: String,
-  maxHp: Int,
-  defense: Int,
-  turnsQueue: BlockingQueue<GameCharacter>
+    name: String,
+    maxHp: Int,
+    defense: Int,
+    turnsQueue: BlockingQueue<GameCharacter>
 ) : AbstractCharacter(name, maxHp, defense, turnsQueue), PlayerCharacter {
 
-  private lateinit var _equippedWeapon: Weapon
-  override val equippedWeapon: Weapon
-    get() = _equippedWeapon
+    private lateinit var _equippedWeapon: WeaponInterface
+    override val equippedWeapon: WeaponInterface
+        get() = _equippedWeapon
 
-  override fun equip(weapon: Weapon) {
-    _equippedWeapon = weapon
-  }
+    override fun equip(weapon: WeaponInterface) {
+        _equippedWeapon = weapon
+    }
 }

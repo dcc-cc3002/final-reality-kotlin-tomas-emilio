@@ -34,32 +34,4 @@ class BlackMage(
     maxMp: Int,
     defense: Int,
     turnsQueue: BlockingQueue<GameCharacter>
-) : AbstractPlayerCharacter(name, maxHp, defense, turnsQueue) {
-    val maxMp = Require.Stat(maxMp, "Max MP") atLeast 0
-    var currentMp: Int = maxMp
-        set(value) {
-            field = Require.Stat(value, "Current MP") inRange 0..maxMp
-        }
-
-    override fun equals(other: Any?) = when {
-        this === other                 -> true
-        other !is BlackMage            -> false
-        hashCode() != other.hashCode() -> false
-        name != other.name             -> false
-        maxHp != other.maxHp           -> false
-        maxMp != other.maxMp           -> false
-        defense != other.defense       -> false
-        else                           -> true
-    }
-
-    override fun hashCode() =
-        Objects.hash(BlackMage::class, name, maxHp, maxMp, defense)
-
-    override fun toString() = "BlackMage { " +
-      "name: '$name' " +
-      "maxMp: $maxMp, " +
-      "maxHp: $maxHp, " +
-      "defense: $defense, " +
-      "currentMp: $currentMp, " +
-      "}"
-}
+) : AbstractMage(name, maxHp, maxMp, defense, turnsQueue)

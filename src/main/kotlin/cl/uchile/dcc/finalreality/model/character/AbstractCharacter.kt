@@ -2,6 +2,7 @@ package cl.uchile.dcc.finalreality.model.character
 
 import cl.uchile.dcc.finalreality.exceptions.Require
 import cl.uchile.dcc.finalreality.model.character.player.PlayerCharacter
+import java.util.Objects
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -23,19 +24,33 @@ import java.util.concurrent.TimeUnit
  * @author ~Your name~
  */
 abstract class AbstractCharacter(
-    override val name: String,
+    private val name: String,
     maxHp: Int,
     defense: Int,
-    private val turnsQueue: BlockingQueue<GameCharacter>,
+    var turnsQueue: BlockingQueue<GameCharacter>,
 ) : GameCharacter {
 
-    private lateinit var scheduledExecutor: ScheduledExecutorService
-    override val maxHp = Require.Stat(maxHp, "Max Hp") atLeast 1
-    override var currentHp = maxHp
+    private val maxHp: Int = Require.Stat(maxHp, "Max Hp") atLeast 1
+    private var currentHp: Int = maxHp
         set(value) {
             field = Require.Stat(value, "Current Hp") inRange 0..maxHp
         }
-    override val defense = Require.Stat(defense, "Defense") atLeast 0
+    private val defense: Int = Require.Stat(defense, "Defense") atLeast 0
+
+    override fun getName() : String{
+        return name
+    }
+    override fun getCurrentHp() : Int{
+        return currentHp
+    }
+    override fun getMaxHp() : Int{
+        return maxHp
+    }
+    override fun getDefense() : Int{
+        return defense
+    }
+
+    private lateinit var scheduledExecutor: ScheduledExecutorService
 
     override fun waitTurn() {
         scheduledExecutor = Executors.newSingleThreadScheduledExecutor()
@@ -43,7 +58,7 @@ abstract class AbstractCharacter(
             is PlayerCharacter -> {
                 scheduledExecutor.schedule(
                     /* command = */ ::addToQueue,
-                    /* delay = */ (this.equippedWeapon.weight / 10).toLong(),
+                    /* delay = */ (this.equippedWeapon.getWeight() / 10).toLong(),
                     /* unit = */ TimeUnit.SECONDS
                 )
             }
@@ -65,4 +80,23 @@ abstract class AbstractCharacter(
         turnsQueue.put(this)
         scheduledExecutor.shutdown()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is AbstractCharacter) return false
+        if (this::class != other::class) return false
+        return defense == other.defense &&
+            name == other.name &&
+            maxHp == other.maxHp
+    }
+
+    override fun hashCode() = Objects.hash(this::class, name, maxHp, defense)
+
+    override fun toString() = this::class.simpleName +
+        " { " +
+        "name: '$name', " +
+        "maxHp: $maxHp, " +
+        "defense: $defense, " +
+        "currentHp: $currentHp " +
+        "}"
 }

@@ -17,14 +17,15 @@ package cl.uchile.dcc.finalreality.model.character
  * @author ~Your name~
  */
 interface GameCharacter {
-    val name: String
-    val maxHp: Int
-    var currentHp: Int
-    val defense: Int
 
     /**
      * Sets a scheduled executor to make this character (thread) wait for `speed / 10`
      * seconds before adding the character to the queue.
      */
     fun waitTurn()
+    fun getName() : String
+    fun getCurrentHp() : Int
+    fun getMaxHp() : Int
+    fun getDefense() : Int
+    //fun setCurrentHp(hp:Int)
 }
