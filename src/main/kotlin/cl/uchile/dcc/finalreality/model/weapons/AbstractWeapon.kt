@@ -6,7 +6,7 @@ abstract class AbstractWeapon(
     private val name: String,
     private val damage: Int,
     private val weight: Int
-): WeaponInterface {
+) : WeaponInterface {
 
     override fun getName(): String {
         return name

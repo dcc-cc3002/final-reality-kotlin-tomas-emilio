@@ -7,7 +7,10 @@
  */
 package cl.uchile.dcc.finalreality.model.character.player
 
+import cl.uchile.dcc.finalreality.exceptions.InvalidWeaponException
 import cl.uchile.dcc.finalreality.model.character.GameCharacter
+import cl.uchile.dcc.finalreality.model.weapons.Bow
+import cl.uchile.dcc.finalreality.model.weapons.Staff
 import java.util.*
 import java.util.concurrent.BlockingQueue
 
@@ -31,4 +34,11 @@ class Knight(
     maxHp: Int,
     defense: Int,
     turnsQueue: BlockingQueue<GameCharacter>
-) : AbstractPlayerCharacter(name, maxHp, defense, turnsQueue)
+) : AbstractPlayerCharacter(name, maxHp, defense, turnsQueue) {
+    override fun equipBow(bow: Bow) {
+        throw InvalidWeaponException("A Knight can´t use a Bow")
+    }
+    override fun equipStaff(staff: Staff) {
+        throw InvalidWeaponException("A Knight can´t use a Staff")
+    }
+}

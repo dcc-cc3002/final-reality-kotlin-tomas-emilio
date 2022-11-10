@@ -26,6 +26,8 @@ class Enemy(
     defense: Int,
     turnsQueue: BlockingQueue<GameCharacter>
 ) : AbstractCharacter(name, maxHp, defense, turnsQueue) {
-    val weight = Require.Stat(weight, "Weight") atLeast 1
+    private val weight = Require.Stat(weight, "Weight") atLeast 1
+    override fun getWeight(): Int {
+        return weight
+    }
 }
-

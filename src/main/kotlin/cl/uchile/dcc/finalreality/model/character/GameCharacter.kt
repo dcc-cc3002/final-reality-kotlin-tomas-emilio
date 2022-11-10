@@ -23,9 +23,9 @@ interface GameCharacter {
      * seconds before adding the character to the queue.
      */
     fun waitTurn()
-    fun getName() : String
-    fun getCurrentHp() : Int
-    fun getMaxHp() : Int
-    fun getDefense() : Int
-    //fun setCurrentHp(hp:Int)
+    fun getName(): String
+    fun getCurrentHp(): Int
+    fun getMaxHp(): Int
+    fun getDefense(): Int
+    fun getWeight(): Int
 }

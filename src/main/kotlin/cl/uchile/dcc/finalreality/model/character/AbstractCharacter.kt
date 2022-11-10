@@ -1,7 +1,6 @@
 package cl.uchile.dcc.finalreality.model.character
 
 import cl.uchile.dcc.finalreality.exceptions.Require
-import cl.uchile.dcc.finalreality.model.character.player.PlayerCharacter
 import java.util.Objects
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.Executors
@@ -27,7 +26,7 @@ abstract class AbstractCharacter(
     private val name: String,
     maxHp: Int,
     defense: Int,
-    var turnsQueue: BlockingQueue<GameCharacter>,
+    var turnsQueue: BlockingQueue<GameCharacter>
 ) : GameCharacter {
 
     private val maxHp: Int = Require.Stat(maxHp, "Max Hp") atLeast 1
@@ -37,50 +36,36 @@ abstract class AbstractCharacter(
         }
     private val defense: Int = Require.Stat(defense, "Defense") atLeast 0
 
-    override fun getName() : String{
+    override fun getName(): String {
         return name
     }
-    override fun getCurrentHp() : Int{
+    override fun getCurrentHp(): Int {
         return currentHp
     }
-    override fun getMaxHp() : Int{
+    override fun getMaxHp(): Int {
         return maxHp
     }
-    override fun getDefense() : Int{
+    override fun getDefense(): Int {
         return defense
     }
 
-    private lateinit var scheduledExecutor: ScheduledExecutorService
-
-    override fun waitTurn() {
-        scheduledExecutor = Executors.newSingleThreadScheduledExecutor()
-        when (this) {
-            is PlayerCharacter -> {
-                scheduledExecutor.schedule(
-                    /* command = */ ::addToQueue,
-                    /* delay = */ (this.equippedWeapon.getWeight() / 10).toLong(),
-                    /* unit = */ TimeUnit.SECONDS
-                )
-            }
-
-            is Enemy -> {
-                scheduledExecutor.schedule(
-                    /* command = */ ::addToQueue,
-                    /* delay = */ (this.weight / 10).toLong(),
-                    /* unit = */ TimeUnit.SECONDS
-                )
-            }
-        }
-    }
+    lateinit var scheduledExecutor: ScheduledExecutorService
 
     /**
      * Adds this character to the turns queue.
      */
-    private fun addToQueue() {
+    fun addToQueue() {
         turnsQueue.put(this)
         scheduledExecutor.shutdown()
     }
-
+    override fun waitTurn() {
+        scheduledExecutor = Executors.newSingleThreadScheduledExecutor()
+        scheduledExecutor.schedule(
+            /* command = */ ::addToQueue,
+            /* delay = */ (this.getWeight() / 10).toLong(),
+            /* unit = */ TimeUnit.SECONDS
+        )
+    }
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is AbstractCharacter) return false

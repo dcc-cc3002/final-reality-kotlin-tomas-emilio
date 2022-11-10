@@ -5,15 +5,18 @@
  * You should have received a copy of the license along with this
  * work. If not, see <http://creativecommons.org/licenses/by/4.0/>.
  */
-package cl.uchile.dcc.finalreality.model.character.player
+package cl.uchile.dcc.finalreality.model.character.player.mage
 
-import cl.uchile.dcc.finalreality.exceptions.Require
+import cl.uchile.dcc.finalreality.exceptions.InvalidWeaponException
 import cl.uchile.dcc.finalreality.model.character.GameCharacter
-import java.util.*
+import cl.uchile.dcc.finalreality.model.weapons.Axe
+import cl.uchile.dcc.finalreality.model.weapons.Bow
+import cl.uchile.dcc.finalreality.model.weapons.Knife
+import cl.uchile.dcc.finalreality.model.weapons.Sword
 import java.util.concurrent.BlockingQueue
 
 /**
- * A Black Mage is a type of player character that can cast black magic.
+ * A White Mage is a type of [AbstractMage] that can cast white magic.
  *
  * @param name        the character's name
  * @param maxHp       the character's maximum health points
@@ -28,10 +31,23 @@ import java.util.concurrent.BlockingQueue
  * @author <a href="https://www.github.com/r8vnhill">R8V</a>
  * @author ~Your name~
  */
-class BlackMage(
+class WhiteMage(
     name: String,
     maxHp: Int,
     maxMp: Int,
     defense: Int,
     turnsQueue: BlockingQueue<GameCharacter>
-) : AbstractMage(name, maxHp, maxMp, defense, turnsQueue)
+) : AbstractMage(name, maxHp, maxMp, defense, turnsQueue) {
+    override fun equipAxe(axe: Axe) {
+        throw InvalidWeaponException("A White Mage can´t use an Axe")
+    }
+    override fun equipBow(bow: Bow) {
+        throw InvalidWeaponException("A White Mage can´t use a Bow")
+    }
+    override fun equipKnife(knife: Knife) {
+        throw InvalidWeaponException("A White Mage can´t use a Knife")
+    }
+    override fun equipSword(sword: Sword) {
+        throw InvalidWeaponException("A White Mage can´t use a Sword")
+    }
+}

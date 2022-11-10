@@ -7,8 +7,11 @@
  */
 package cl.uchile.dcc.finalreality.model.character.player
 
+import cl.uchile.dcc.finalreality.exceptions.InvalidWeaponException
 import cl.uchile.dcc.finalreality.model.character.GameCharacter
-import java.util.Objects
+import cl.uchile.dcc.finalreality.model.weapons.Knife
+import cl.uchile.dcc.finalreality.model.weapons.Staff
+import cl.uchile.dcc.finalreality.model.weapons.Sword
 import java.util.concurrent.BlockingQueue
 
 /**
@@ -31,4 +34,14 @@ class Engineer(
     maxHp: Int,
     defense: Int,
     turnsQueue: BlockingQueue<GameCharacter>
-) : AbstractPlayerCharacter(name, maxHp, defense, turnsQueue)
+) : AbstractPlayerCharacter(name, maxHp, defense, turnsQueue) {
+    override fun equipKnife(knife: Knife) {
+        throw InvalidWeaponException("An Engineer can´t use a Knife")
+    }
+    override fun equipStaff(staff: Staff) {
+        throw InvalidWeaponException("An Engineer can´t use a Staff")
+    }
+    override fun equipSword(sword: Sword) {
+        throw InvalidWeaponException("An Engineer can´t use a Sword")
+    }
+}

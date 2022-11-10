@@ -7,7 +7,10 @@
  */
 package cl.uchile.dcc.finalreality.model.character.player
 
+import cl.uchile.dcc.finalreality.exceptions.InvalidWeaponException
 import cl.uchile.dcc.finalreality.model.character.GameCharacter
+import cl.uchile.dcc.finalreality.model.weapons.Axe
+import cl.uchile.dcc.finalreality.model.weapons.Staff
 import java.util.*
 import java.util.concurrent.BlockingQueue
 
@@ -30,4 +33,11 @@ class Thief(
     maxHp: Int,
     defense: Int,
     turnsQueue: BlockingQueue<GameCharacter>
-) : AbstractPlayerCharacter(name, maxHp, defense, turnsQueue)
+) : AbstractPlayerCharacter(name, maxHp, defense, turnsQueue) {
+    override fun equipAxe(axe: Axe) {
+        throw InvalidWeaponException("A Thief can´t use an Axe")
+    }
+    override fun equipStaff(staff: Staff) {
+        throw InvalidWeaponException("A Thief can´t use a Staff")
+    }
+}

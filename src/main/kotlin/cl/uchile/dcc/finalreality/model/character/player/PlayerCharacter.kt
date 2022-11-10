@@ -7,10 +7,13 @@
  */
 package cl.uchile.dcc.finalreality.model.character.player
 
-import cl.uchile.dcc.finalreality.model.weapons.WeaponInterface
-import cl.uchile.dcc.finalreality.model.character.AbstractCharacter
 import cl.uchile.dcc.finalreality.model.character.GameCharacter
-import java.util.concurrent.BlockingQueue
+import cl.uchile.dcc.finalreality.model.weapons.Axe
+import cl.uchile.dcc.finalreality.model.weapons.Bow
+import cl.uchile.dcc.finalreality.model.weapons.Knife
+import cl.uchile.dcc.finalreality.model.weapons.Staff
+import cl.uchile.dcc.finalreality.model.weapons.Sword
+import cl.uchile.dcc.finalreality.model.weapons.WeaponInterface
 
 /**
  * A character controlled by the user.
@@ -20,39 +23,16 @@ import java.util.concurrent.BlockingQueue
  * @author <a href="https://www.github.com/r8vnhill">R8V</a>
  * @author ~Your name~
  */
-interface PlayerCharacter: GameCharacter {
-  val equippedWeapon: WeaponInterface
+interface PlayerCharacter : GameCharacter {
+    val equippedWeapon: WeaponInterface
 
-  /**
-   * Equips a weapon to the character.
-   */
-  fun equip(weapon: WeaponInterface)
-}
-
-/**
- * A class that holds all the information of a player-controlled character in the game.
- *
- * @param name        the character's name
- * @param maxHp       the character's maximum health points
- * @param defense     the character's defense
- * @param turnsQueue  the queue with the characters waiting for their turn
- * @constructor Creates a new playable character.
- *
- * @author <a href="https://www.github.com/r8vnhill">R8V</a>
- * @author ~Your name~
- */
-abstract class AbstractPlayerCharacter(
-    name: String,
-    maxHp: Int,
-    defense: Int,
-    turnsQueue: BlockingQueue<GameCharacter>
-) : AbstractCharacter(name, maxHp, defense, turnsQueue), PlayerCharacter {
-
-    private lateinit var _equippedWeapon: WeaponInterface
-    override val equippedWeapon: WeaponInterface
-        get() = _equippedWeapon
-
-    override fun equip(weapon: WeaponInterface) {
-        _equippedWeapon = weapon
-    }
+    /**
+     * Equips a weapon to the character.
+     */
+    fun equip(weapon: WeaponInterface)
+    fun equipAxe(axe: Axe)
+    fun equipBow(bow: Bow)
+    fun equipKnife(knife: Knife)
+    fun equipStaff(staff: Staff)
+    fun equipSword(sword: Sword)
 }

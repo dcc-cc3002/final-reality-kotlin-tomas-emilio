@@ -1,7 +1,8 @@
-package cl.uchile.dcc.finalreality.model.character.player
+package cl.uchile.dcc.finalreality.model.character.player.mage
 
 import cl.uchile.dcc.finalreality.exceptions.Require
 import cl.uchile.dcc.finalreality.model.character.GameCharacter
+import cl.uchile.dcc.finalreality.model.character.player.AbstractPlayerCharacter
 import java.util.Objects
 import java.util.concurrent.BlockingQueue
 
@@ -11,12 +12,12 @@ abstract class AbstractMage(
     maxMp: Int,
     defense: Int,
     turnsQueue: BlockingQueue<GameCharacter>
-) : AbstractPlayerCharacter(name, maxHp, defense, turnsQueue), MageInterface{
-    private val maxMp: Int  = Require.Stat(maxMp, "Max MP") atLeast 0
+) : AbstractPlayerCharacter(name, maxHp, defense, turnsQueue), MageInterface {
+    private val maxMp: Int = Require.Stat(maxMp, "Max Mp") atLeast 1
 
     private var currentMp: Int = maxMp
         set(value) {
-            field = Require.Stat(value, "Current MP") inRange 0..maxMp
+            field = Require.Stat(value, "Current Mp") inRange 0..maxMp
         }
 
     override fun getCurrentMp(): Int {
