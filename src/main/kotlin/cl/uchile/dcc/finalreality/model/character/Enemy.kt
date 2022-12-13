@@ -1,7 +1,6 @@
 package cl.uchile.dcc.finalreality.model.character
 
 import cl.uchile.dcc.finalreality.exceptions.Require
-import java.util.*
 import java.util.concurrent.BlockingQueue
 
 /**
@@ -24,10 +23,29 @@ class Enemy(
     weight: Int,
     maxHp: Int,
     defense: Int,
+    private val attack: Int,
     turnsQueue: BlockingQueue<GameCharacter>
 ) : AbstractCharacter(name, maxHp, defense, turnsQueue) {
     private val weight = Require.Stat(weight, "Weight") atLeast 1
     override fun getWeight(): Int {
         return weight
+    }
+
+    /**
+     * Attack to other character
+     * an enemy can attack any character in the game, include allies and enemies
+     *
+     * @param character the character who this character attacks
+     *
+     */
+    override fun attack(character: GameCharacter) {
+        val damage: Int = attack - character.getDefense()
+        if (damage > 0) {
+            character.alterHp(-damage)
+        }
+    }
+
+    override fun isPlayable(): Boolean {
+        return false
     }
 }

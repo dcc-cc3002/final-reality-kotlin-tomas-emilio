@@ -118,9 +118,10 @@ class AbstractCharacterTest : FunSpec({
                 Arb.string(), // name
                 Arb.positiveInt(), // maxHp
                 Arb.positiveInt(), // defense
+                Arb.positiveInt(), // attack
                 Arb.positiveInt() // weight
-            ) { name, maxHp, defense, weight ->
-                val enemy = Enemy(name, maxHp, defense, weight, LinkedBlockingQueue())
+            ) { name, maxHp, defense, weight, attack ->
+                val enemy = Enemy(name, maxHp, defense, weight, attack, LinkedBlockingQueue())
                 enemy.getName() shouldBe name
             }
         }
@@ -174,7 +175,7 @@ class AbstractCharacterTest : FunSpec({
     context("Wait Turn") {
         test("The order of the turns of the character must be related to their weapon weight or enemy weight)") {
             val queue = LinkedBlockingQueue<GameCharacter>()
-            val enemy = Enemy("", 1, 1, Random.nextInt(1, 30), queue)
+            val enemy = Enemy("", Random.nextInt(1, 30), 1, 1, 1, queue)
             val wm = WhiteMage("", 1, 1, 1, queue)
             val wmWeapon = Staff("", 1, Random.nextInt(1, 30), 1)
             wm.equip(wmWeapon)
@@ -184,6 +185,17 @@ class AbstractCharacterTest : FunSpec({
             val first = queue.poll().getWeight()
             val second = queue.poll().getWeight()
             second shouldBeGreaterThan first
+        }
+    }
+    context("Modify Hp") {
+        test("Modifies the currentHp gives a value always between 0 and maxHp") {
+            checkAll(
+                Arb.string(), // name
+                Arb.positiveInt(), // maxHp
+                Arb.positiveInt(), // defense
+            ) { name, maxHp, defense ->
+                val knight = Knight(name, maxHp, defense, LinkedBlockingQueue())
+            }
         }
     }
 })

@@ -6,5 +6,7 @@ interface WeaponInterface {
     fun getName(): String
     fun getDamage(): Int
     fun getWeight(): Int
+    fun getMagicDamage(): Int
     fun canEquip(playerCharacter: PlayerCharacter)
+    fun isMagic(): Boolean
 }

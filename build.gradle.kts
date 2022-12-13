@@ -6,6 +6,7 @@ import org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML
 plugins {
     kotlin("jvm") version "1.7.10"
     id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
+    id("org.jetbrains.dokka") version "1.7.20"
 }
 
 group = "cl.uchile.dcc.finalreality"
@@ -19,6 +20,7 @@ dependencies {
     implementation("io.kotest:kotest-property:5.5.4")
     implementation("io.kotest:kotest-assertions-core:5.5.4")
     testImplementation("io.kotest:kotest-runner-junit5-jvm:5.5.4")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
 }
 
 tasks.test {

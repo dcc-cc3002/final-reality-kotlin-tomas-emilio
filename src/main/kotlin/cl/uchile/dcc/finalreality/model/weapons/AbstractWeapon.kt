@@ -20,6 +20,10 @@ abstract class AbstractWeapon(
         return weight
     }
 
+    override fun getMagicDamage(): Int {
+        return 0
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is AbstractWeapon) return false
@@ -33,4 +37,14 @@ abstract class AbstractWeapon(
 
     override fun toString() = this::class.simpleName +
         " { name: $name, damage: $damage, weight: $weight }"
+
+    /**
+     * A weapon is magic if have magic damage, this function is useful for spells logic because a mage
+     * can´t throw a spell if haven´t a staff (the only magic weapon)
+     *
+     * @return false for all the weapons, except the staff
+     */
+    override fun isMagic(): Boolean {
+        return false
+    }
 }

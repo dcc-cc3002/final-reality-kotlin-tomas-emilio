@@ -11,7 +11,7 @@ class EnemyTest : FunSpec({
     context("Wait Turn") {
         test("A enemy must added to the queue before a time delay") {
             val queue = LinkedBlockingQueue<GameCharacter>()
-            val enemy = Enemy("", Random.nextInt(1, 50), 1, 1, queue)
+            val enemy = Enemy("", Random.nextInt(1, 50), 1, 1, 1, queue)
             enemy.waitTurn()
             queue.shouldBeEmpty()
             Thread.sleep(6000)

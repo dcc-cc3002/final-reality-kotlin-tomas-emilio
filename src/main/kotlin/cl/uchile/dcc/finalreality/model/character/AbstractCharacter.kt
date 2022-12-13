@@ -1,6 +1,11 @@
 package cl.uchile.dcc.finalreality.model.character
 
 import cl.uchile.dcc.finalreality.exceptions.Require
+import cl.uchile.dcc.finalreality.model.effect.CompositeEffect
+import cl.uchile.dcc.finalreality.model.effect.Effect
+import cl.uchile.dcc.finalreality.model.states.CharacterCreation
+import cl.uchile.dcc.finalreality.model.states.TurnState
+import cl.uchile.dcc.finalreality.model.states.WaitTurn
 import java.util.Objects
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.Executors
@@ -26,7 +31,7 @@ abstract class AbstractCharacter(
     private val name: String,
     maxHp: Int,
     defense: Int,
-    var turnsQueue: BlockingQueue<GameCharacter>
+    private var turnsQueue: BlockingQueue<GameCharacter>
 ) : GameCharacter {
 
     private val maxHp: Int = Require.Stat(maxHp, "Max Hp") atLeast 1
@@ -36,6 +41,20 @@ abstract class AbstractCharacter(
         }
     private val defense: Int = Require.Stat(defense, "Defense") atLeast 0
 
+    private var turnState: TurnState = CharacterCreation(this, turnsQueue)
+
+    override val effects: Effect = CompositeEffect(this)
+
+    override var isParalyzed: Boolean = false
+
+    override val waitTurn: WaitTurn = WaitTurn(this, turnsQueue)
+    override fun setState(state: TurnState) {
+        turnState = state
+        turnState.setCharacter(this)
+    }
+    override fun stateAction() {
+        turnState.stateAction()
+    }
     override fun getName(): String {
         return name
     }
@@ -49,12 +68,12 @@ abstract class AbstractCharacter(
         return defense
     }
 
-    lateinit var scheduledExecutor: ScheduledExecutorService
+    private lateinit var scheduledExecutor: ScheduledExecutorService
 
     /**
      * Adds this character to the turns queue.
      */
-    fun addToQueue() {
+    private fun addToQueue() {
         turnsQueue.put(this)
         scheduledExecutor.shutdown()
     }
@@ -84,4 +103,25 @@ abstract class AbstractCharacter(
         "defense: $defense, " +
         "currentHp: $currentHp " +
         "}"
+    override fun alterHp(n: Int) {
+        if (currentHp + n <= 0) {
+            currentHp = 0
+        } else if (currentHp + n >= maxHp) {
+            currentHp = maxHp
+        } else {
+            currentHp += n
+        }
+    }
+
+    override fun isDied(): Boolean {
+        return currentHp > 0
+    }
+
+    override fun applyEffect() {
+        effects.applyEffect()
+    }
+
+    override fun removeFromQueue() {
+        turnsQueue.removeAll(listOf(this).toSet())
+    }
 }

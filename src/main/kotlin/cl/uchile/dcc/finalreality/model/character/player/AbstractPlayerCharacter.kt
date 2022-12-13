@@ -20,7 +20,7 @@ import java.util.concurrent.BlockingQueue
  * @constructor Creates a new playable character.
  *
  * @author <a href="https://www.github.com/r8vnhill">R8V</a>
- * @author ~Your name~
+ * @author <a href="https://github.com/tomas-emilio">Tomás Escobar</a>
  */
 abstract class AbstractPlayerCharacter(
     name: String,
@@ -54,5 +54,23 @@ abstract class AbstractPlayerCharacter(
     }
     override fun getWeight(): Int {
         return equippedWeapon.getWeight()
+    }
+
+    /**
+     * Attack to other character
+     * a player of the game can attack any character in the game, include allies and enemies
+     *
+     * @param character the character who this character attacks
+     *
+     */
+    override fun attack(character: GameCharacter) {
+        val damage: Int = _equippedWeapon.getDamage() - character.getDefense()
+        if (damage > 0) {
+            character.alterHp(-damage)
+        }
+    }
+
+    override fun isPlayable(): Boolean {
+        return true
     }
 }

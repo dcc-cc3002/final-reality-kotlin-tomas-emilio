@@ -7,8 +7,12 @@
  */
 package cl.uchile.dcc.finalreality.model.character.player.mage
 
+import cl.uchile.dcc.finalreality.exceptions.InsufficientStatsException
+import cl.uchile.dcc.finalreality.exceptions.InvalidSpellException
 import cl.uchile.dcc.finalreality.exceptions.InvalidWeaponException
 import cl.uchile.dcc.finalreality.model.character.GameCharacter
+import cl.uchile.dcc.finalreality.model.effect.Effect
+import cl.uchile.dcc.finalreality.model.spell.Spell
 import cl.uchile.dcc.finalreality.model.weapons.Axe
 import cl.uchile.dcc.finalreality.model.weapons.Bow
 import cl.uchile.dcc.finalreality.model.weapons.Sword
@@ -45,5 +49,35 @@ class BlackMage(
     }
     override fun equipSword(sword: Sword) {
         throw InvalidWeaponException("A Black Mage can´t use a Sword")
+    }
+
+    override fun castFire(spell: Spell, receiver: GameCharacter): Effect? {
+        if (this.canPaySpell(spell)) {
+            this.alterMp(-spell.cost)
+            return spell.applySpell(receiver, this.getMagicDamage())
+        } else {
+            throw InsufficientStatsException("Not enough mana for the fire")
+        }
+    }
+
+    override fun castHeal(spell: Spell, receiver: GameCharacter): Effect? {
+        if (this.canPaySpell(spell)) {
+            this.alterMp(-spell.cost)
+            return spell.applySpell(receiver, this.getMagicDamage())
+        } else {
+            throw InsufficientStatsException("Not enough mana for the heal")
+        }
+    }
+
+    override fun castParalysis(spell: Spell, receiver: GameCharacter): Effect? {
+        throw InvalidSpellException("A black mage can't use paralysis")
+    }
+
+    override fun castPoison(spell: Spell, receiver: GameCharacter): Effect? {
+        throw InvalidSpellException("A black mage can't use poison")
+    }
+
+    override fun castThunder(spell: Spell, receiver: GameCharacter): Effect? {
+        throw InvalidSpellException("A black mage can't use thunder")
     }
 }
